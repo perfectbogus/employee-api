@@ -1,4 +1,12 @@
 package dev.perfectbogus.employeeapi.repository;
 
-public class EmployeeRepository {
+import dev.perfectbogus.employeeapi.model.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+    List<Employee> findByDepartment(String department);
 }
