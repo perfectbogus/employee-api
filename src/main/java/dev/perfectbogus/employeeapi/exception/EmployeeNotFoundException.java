@@ -1,7 +1,15 @@
 package dev.perfectbogus.employeeapi.exception;
 
+import lombok.Getter;
+
+@Getter
 public class EmployeeNotFoundException extends RuntimeException {
-    public EmployeeNotFoundException(String message) {
-        super(message);
+
+    private final Long id;
+
+    public EmployeeNotFoundException(Long id) {
+        super("Employee not found with id: " + id);
+        this.id = id;
     }
+
 }
