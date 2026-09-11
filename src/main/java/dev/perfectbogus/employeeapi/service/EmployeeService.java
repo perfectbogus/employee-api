@@ -1,5 +1,6 @@
 package dev.perfectbogus.employeeapi.service;
 
+import dev.perfectbogus.employeeapi.dto.EmployeePatchRequest;
 import dev.perfectbogus.employeeapi.exception.EmployeeNotFoundException;
 import dev.perfectbogus.employeeapi.model.Employee;
 import dev.perfectbogus.employeeapi.repository.EmployeeRepository;
@@ -43,6 +44,17 @@ public class EmployeeService {
         existing.setDepartment(employee.getDepartment());
         existing.setName(employee.getName());
         existing.setSalary(employee.getSalary());
+
+        return repository.save(existing);
+    }
+
+    @Transactional
+    public Employee patch(Long id, EmployeePatchRequest request) {
+        Employee existing = getById(id);
+
+        if (request.name() != null) existing.setName(request.name());
+        if (request.department() != null) existing.setDepartment(request.department());
+        if (request.salary() != null) existing.setSalary(request.salary());
 
         return repository.save(existing);
     }

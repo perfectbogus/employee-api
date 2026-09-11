@@ -1,4 +1,7 @@
 package dev.perfectbogus.employeeapi.dto;
 
-public class EmployeePatchRequest {
-}
+public record EmployeePatchRequest(
+        String name,
+        String department,
+        Double salary
+) {}

@@ -1,5 +1,6 @@
 package dev.perfectbogus.employeeapi.controller;
 
+import dev.perfectbogus.employeeapi.dto.EmployeePatchRequest;
 import dev.perfectbogus.employeeapi.model.Employee;
 import dev.perfectbogus.employeeapi.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -40,5 +41,10 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         service.delete(id);
+    }
+
+    @PatchMapping("/{id}")
+    public Employee patch(@PathVariable Long id, @RequestBody EmployeePatchRequest request) {
+        return service.patch(id, request);
     }
 }
