@@ -1,8 +1,11 @@
 package dev.perfectbogus.employeeapi.service;
 
+import dev.perfectbogus.employeeapi.dto.CreateEmployeeRequest;
 import dev.perfectbogus.employeeapi.dto.EmployeePatchRequest;
+import dev.perfectbogus.employeeapi.dto.EmployeeResponse;
 import dev.perfectbogus.employeeapi.dto.PageResponse;
 import dev.perfectbogus.employeeapi.exception.EmployeeNotFoundException;
+import dev.perfectbogus.employeeapi.mapper.EmployeeMapper;
 import dev.perfectbogus.employeeapi.model.Employee;
 import dev.perfectbogus.employeeapi.repository.EmployeeRepository;
 
@@ -16,15 +19,21 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class EmployeeService {
     private final EmployeeRepository repository;
+    private final EmployeeMapper mapper;
 
     @Transactional(readOnly = true)
     public Employee getById(Long id) {
         return repository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
+    public EmployeeResponse getEmployeeResponseById(Long id) {
+        return mapper.toResponse(getById(id));
+    }
+
     @Transactional
-    public Employee create(Employee employee) {
-        return repository.save(employee);
+    public EmployeeResponse create(CreateEmployeeRequest request) {
+        Employee saved = repository.save(mapper.toEntity(request));
+        return mapper.toResponse(saved);
     }
 
     @Transactional
@@ -34,29 +43,33 @@ public class EmployeeService {
     }
 
     @Transactional
-    public Employee update(Long id, Employee employee) {
+    public EmployeeResponse update(Long id, CreateEmployeeRequest request) {
         Employee existing = getById(id);
 
-        existing.setDepartment(employee.getDepartment());
-        existing.setName(employee.getName());
-        existing.setSalary(employee.getSalary());
+        existing.setDepartment(request.getDepartment());
+        existing.setName(request.getName());
+        existing.setSalary(request.getSalary());
 
-        return repository.save(existing);
+        Employee saved = repository.save(existing);
+
+        return mapper.toResponse(saved);
     }
 
     @Transactional
-    public Employee patch(Long id, EmployeePatchRequest request) {
+    public EmployeeResponse patch(Long id, EmployeePatchRequest request) {
         Employee existing = getById(id);
 
         if (request.name() != null) existing.setName(request.name());
         if (request.department() != null) existing.setDepartment(request.department());
         if (request.salary() != null) existing.setSalary(request.salary());
 
-        return repository.save(existing);
+        Employee saved = repository.save(existing);
+
+        return mapper.toResponse(saved);
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<Employee> filter(
+    public PageResponse<EmployeeResponse> filter(
             String department,
             Double minSalary,
             Double maxSalary,
@@ -82,9 +95,9 @@ public class EmployeeService {
         return toPageResponse(page);
     }
 
-    private PageResponse<Employee> toPageResponse(Page<Employee> page) {
+    private PageResponse<EmployeeResponse> toPageResponse(Page<Employee> page) {
         return new PageResponse<>(
-                page.getContent(),
+                mapper.toResponseList(page.getContent()),
                 page.getNumber(),
                 page.getSize(),
                 page.getTotalElements(),

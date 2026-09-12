@@ -1,6 +1,8 @@
 package dev.perfectbogus.employeeapi.controller;
 
+import dev.perfectbogus.employeeapi.dto.CreateEmployeeRequest;
 import dev.perfectbogus.employeeapi.dto.EmployeePatchRequest;
+import dev.perfectbogus.employeeapi.dto.EmployeeResponse;
 import dev.perfectbogus.employeeapi.dto.PageResponse;
 import dev.perfectbogus.employeeapi.model.Employee;
 import dev.perfectbogus.employeeapi.service.EmployeeService;
@@ -20,12 +22,12 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee create(@Valid @RequestBody Employee employee) {
-        return service.create(employee);
+    public EmployeeResponse create(@Valid @RequestBody CreateEmployeeRequest request) {
+        return service.create(request);
     }
 
     @GetMapping
-    public PageResponse<Employee> getAll(
+    public PageResponse<EmployeeResponse> getAll(
             @RequestParam(required = false) String department,
             @RequestParam(required = false) Double minSalary,
             @RequestParam(required = false) Double maxSalary,
@@ -35,13 +37,13 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public Employee getById(@PathVariable Long id) {
-        return service.getById(id);
+    public EmployeeResponse getById(@PathVariable Long id) {
+        return service.getEmployeeResponseById(id);
     }
 
     @PutMapping("/{id}")
-    public Employee update(@PathVariable Long id, @RequestBody Employee employee) {
-        return service.update(id, employee);
+    public EmployeeResponse update(@PathVariable Long id, @RequestBody CreateEmployeeRequest request) {
+        return service.update(id, request);
     }
 
     @DeleteMapping("/{id}")
@@ -51,7 +53,7 @@ public class EmployeeController {
     }
 
     @PatchMapping("/{id}")
-    public Employee patch(@PathVariable Long id, @RequestBody EmployeePatchRequest request) {
+    public EmployeeResponse patch(@PathVariable Long id, @RequestBody EmployeePatchRequest request) {
         return service.patch(id, request);
     }
 }

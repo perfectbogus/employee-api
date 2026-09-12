@@ -1,32 +1,23 @@
-package dev.perfectbogus.employeeapi.model;
+package dev.perfectbogus.employeeapi.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "employees")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Employee {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class CreateEmployeeRequest {
 
     @NotBlank
-    @Size(min = 2, max = 100)
     private String name;
 
     @NotBlank
+    @Size(min = 2, max = 100)
     private String department;
 
     @NotNull
