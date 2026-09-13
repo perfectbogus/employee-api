@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 public class CreateEmployeeRequest {
 
     @NotBlank
+    @Size(min = 2, max = 100)
     private String name;
 
     @NotBlank
-    @Size(min = 2, max = 100)
     private String department;
 
     @NotNull

@@ -92,18 +92,7 @@ public class EmployeeService {
             page = repository.findByDepartmentIgnoreCaseAndSalaryBetween(department, min, max, pageable);
         }
 
-        return toPageResponse(page);
+        return mapper.toResponsePage(page);
     }
 
-    private PageResponse<EmployeeResponse> toPageResponse(Page<Employee> page) {
-        return new PageResponse<>(
-                mapper.toResponseList(page.getContent()),
-                page.getNumber(),
-                page.getSize(),
-                page.getTotalElements(),
-                page.getTotalPages(),
-                page.isFirst(),
-                page.isLast()
-        );
-    }
 }
